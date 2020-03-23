@@ -19,5 +19,13 @@ router.route('/add').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+
+router.route('/:username').get((req,res) => { // the route '/:id' works essentially as a variable here which can stand for the ids created by MongoDB
+    User.findOne({user: req.body.username}, (err, item) => {
+        // console.log(item)
+        res.json(item);
+    })
+});
+
 // standard procedure for router files: export the router
 module.exports = router;

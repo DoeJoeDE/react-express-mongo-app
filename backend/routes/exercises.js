@@ -28,5 +28,35 @@ router.route('/add').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+
+router.route('/:id').get((req,res) => { // the route '/:id' works essentially as a variable here which can stand for the ids created by MongoDB
+    Exercise.findById(req.params.id) // find the exercise with the indicated id in the database
+        .then(exercise => res.json(exercise))
+        .catch(err => res.status(400).json('Error: ' + err));
+})
+
+// delete route
+router.route('/:id').delete((req,res) => {
+    Exercise.findByIdAndDelete(req.params.id)
+        .then(() => res.json('Exercise deleted.'))
+        .catch(err => res.status(400).json('Error: ' + err));
+})
+
+// update route
+router.route('/update/:id').post((req,res) => {
+    Exercise.findById(req.params.id)
+        .then(exercise => {
+            exercise.username = req.body.username;
+            exercise.description = req.body.description;
+            exercise.duration = Number(req.body.duration);
+            exercise.date = Date.parse(req.body.date);
+
+            exercise.save()
+                .then(() => res.json('Exercise updated!'))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+})
+
 // standard procedure for router files: export the router
 module.exports = router;
