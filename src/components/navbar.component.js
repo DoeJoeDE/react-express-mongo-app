@@ -1,7 +1,7 @@
 // prototypical start of most component files
-import React, {component, Component} from 'react';
+import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-import { render } from '@testing-library/react';
+// import { render } from '@testing-library/react';
 
 export default class Navbar extends Component {
 

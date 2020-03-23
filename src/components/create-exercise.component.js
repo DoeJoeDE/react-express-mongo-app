@@ -1,4 +1,5 @@
 import React, { Component } from 'react'; // import Component from react
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -27,10 +28,21 @@ export default class CreateExercise extends Component {
     }
 
     componentDidMount() { // componentDidMount is a so called life cycle method in React which will always be called at some point, in this case right before anything displays on the page
-        this.setState({
-            users: ['test user'],
-            username: 'test user' // create a test user as placeholder
-        })
+        // this.setState({
+        //     users: ['test user'],
+        //     username: 'test user' // create a test user as placeholder
+        // })
+
+        axios.get('http://localhost:5000/users')
+            .then( res => {
+                if(res) {
+                // if(res.data.length > 0) {
+                    this.setState({
+                        users: res.data.map(user => user.username), // map each entry for a user to an entry with the corresponding username in the array
+                        username: res.data[0].username // take the username of the first user in the database as default
+                    })
+                }
+            })
     }
 
     // method to change username
@@ -73,9 +85,14 @@ export default class CreateExercise extends Component {
             date: this.state.date
         }
 
-        window.location = "/"; // redirect the user to the homepage, i.e. the list of exercises
+        axios.post('http://localhost:5000/exercises/add', exercise) // post the exercise-object to the indicated address
+            .then(res => console.log(res.data));
 
         console.log(exercise);
+            
+        window.location = "/"; // redirect the user to the homepage, i.e. the list of exercises
+
+
     }
 
 
